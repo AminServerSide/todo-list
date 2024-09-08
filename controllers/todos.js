@@ -1,10 +1,13 @@
 const Todo = require("../model/todo");
 
-exports.getIndex = (req, res) => {
-    Todo.fetchAll((todos) => {
-        res.render("index", {
-            pageTitle: "کارهای روزمره",
-            todos,
-        });
+exports.getIndex = async (req, res) => {
+    const completedTodos = await Todo.countDocuments({ completed: true });
+    const todos = await Todo.find();
+
+    res.render("index", {
+        pageTitle: "کارهای روزمره",
+        todos,
+        completedTodos,
+        remainingTodos: todos.length - completedTodos,
     });
 };

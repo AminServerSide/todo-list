@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
+const { v4: uuidv4 } = require("uuid");
+
 const rootDir = require("./path");
 const filePath = path.join(rootDir, "data", "todos.json");
 
@@ -18,5 +20,17 @@ exports.saveTodos = (todos, callback) => {
 };
 
 exports.generateRandomId = () => {
-    return Math.floor(Math.random() * 1000);
+    return uuidv4();
+};
+
+exports.getCompletedTodos = (callback) => {
+    this.getTodos((todos) => {
+        callback(todos.filter((t) => t.completed === true).length);
+    });
+};
+
+exports.getRemainingTodos = (callback) => {
+    this.getTodos((todos) => {
+        callback(todos.filter((t) => t.completed !== true).length);
+    });
 };
